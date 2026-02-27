@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnóstico MVP NUVO</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --deep:    #0a2330;
+  --mid:     #163344;
+  --teal:    #1e7a8f;
+  --glow:    #2fb8d4;
+  --cream:   #f0ece3;
+  --white:   #ffffff;
+  --green:   #3ecf8e;
+  --red:     #e05252;
+  --gold:    #f0c060;
+  --muted:   rgba(240,236,227,0.45);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--deep);
+  color: var(--white);
+  font-family: 'Poppins', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── BACKGROUND ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 90% 55% at 10% 90%, rgba(30,122,143,0.2) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 45% at 90% 5%,  rgba(47,184,212,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(10,35,48,0.6) 0%, transparent 80%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page {
+  position: relative;
+  z-index: 1;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 56px 28px 100px;
+}
+
+/* ── HEADER ── */
+.header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(47,184,212,0.1);
+  border: 1px solid rgba(47,184,212,0.3);
+  border-radius: 100px;
+  padding: 6px 18px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--glow);
+  margin-bottom: 20px;
+}
+
+.badge-dot {
+  width: 6px; height: 6px;
+  background: var(--glow);
+  border-radius: 50%;
+  animation: blink 2s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
+.header h1 {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--cream);
+  margin-bottom: 14px;
+  letter-spacing: -0.02em;
+}
+
+.header h1 span { color: var(--glow); }
+
+.header p {
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--muted);
+  max-width: 540px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* ── SECTION TITLE ── */
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.section-num {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--teal), var(--glow));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--white);
+  flex-shrink: 0;
+}
+
+.section-title h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--cream);
+  letter-spacing: -0.01em;
+}
+
+.section-title p {
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-weight: 300;
+  margin-top: 2px;
+}
+
+/* ── CARD ── */
+.card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(47,184,212,0.14);
+  border-radius: 22px;
+  padding: 36px 32px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(4px);
+}
+
+/* ── GRID INPUTS ── */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 18px;
+}
+
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+@media (max-width: 700px) {
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 440px) {
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+}
+
+/* ── FIELD ── */
+.field { display: flex; flex-direction: column; gap: 7px; }
+
+.field label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--glow);
+}
+
+.field input,
+.field select {
+  background: rgba(255,255,255,0.05);
+  border: 1.5px solid rgba(47,184,212,0.22);
+  border-radius: 12px;
+  padding: 13px 16px;
+  color: var(--white);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 500;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.field input:focus,
+.field select:focus {
+  border-color: var(--glow);
+  background: rgba(47,184,212,0.07);
+}
+
+.field input::placeholder { color: rgba(255,255,255,0.2); }
+
+.field select {
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%232fb8d4' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 38px;
+  cursor: pointer;
+}
+
+.field select option { background: #163344; }
+
+/* ── HINT ── */
+.field-hint {
+  font-size: 0.62rem;
+  color: rgba(240,236,227,0.3);
+  font-weight: 300;
+  margin-top: -2px;
+}
+
+/* ── RESULTADO CONVERSAO ── */
+.conv-result {
+  margin-top: 28px;
+  display: none;
+}
+
+.conv-result.visible { display: block; }
+
+.conv-result-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 600px) {
+  .conv-result-grid { grid-template-columns: 1fr 1fr; }
+}
+
+.conv-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(47,184,212,0.15);
+  border-radius: 14px;
+  padding: 18px 16px;
+}
+
+.conv-card.danger  { border-color: rgba(224,82,82,0.4);  background: rgba(224,82,82,0.06); }
+.conv-card.success { border-color: rgba(47,184,212,0.45); background: rgba(47,184,212,0.08); }
+.conv-card.gold    { border-color: rgba(240,192,96,0.4);  background: rgba(240,192,96,0.06); }
+
+.conv-card-lbl {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.conv-card-val {
+  font-size: 1.5rem;
+  font-weight: 700;
+  display: block;
+  color: var(--cream);
+}
+
+.conv-card.danger  .conv-card-val { color: #f08080; }
+.conv-card.success .conv-card-val { color: var(--glow); }
+.conv-card.gold    .conv-card-val { color: var(--gold); }
+
+.conv-card-sub {
+  font-size: 0.62rem;
+  color: var(--muted);
+  font-weight: 300;
+  margin-top: 3px;
+  display: block;
+}
+
+/* Taxa benchmark bar */
+.bench-bar {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(47,184,212,0.12);
+  border-radius: 14px;
+  padding: 18px 20px;
+}
+
+.bench-bar-title {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
+.bench-track {
+  height: 10px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 100px;
+  position: relative;
+  margin-bottom: 10px;
+  overflow: visible;
+}
+
+.bench-fill-bg {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  border-radius: 100px;
+  background: linear-gradient(90deg, #e05252, #f0c060, #3ecf8e);
+  width: 100%;
+  opacity: 0.25;
+}
+
+.bench-fill-user {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  border-radius: 100px;
+  background: linear-gradient(90deg, #e05252, #f0c060);
+  transition: width 0.8s cubic-bezier(0.22,1,0.36,1);
+  width: 0%;
+}
+
+.bench-needle {
+  position: absolute;
+  top: -4px;
+  width: 18px; height: 18px;
+  background: var(--glow);
+  border: 3px solid var(--deep);
+  border-radius: 50%;
+  transform: translateX(-50%);
+  transition: left 0.8s cubic-bezier(0.22,1,0.36,1);
+  box-shadow: 0 0 10px rgba(47,184,212,0.5);
+}
+
+.bench-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.6rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* ── DIVIDER ── */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(47,184,212,0.2), transparent);
+  margin: 48px 0;
+  position: relative;
+}
+
+.divider-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--deep);
+  padding: 0 16px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--glow);
+}
+
+/* ── BARS SECTION ── */
+.bars-title {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 22px;
+}
+
+.bars-wrap { display: flex; flex-direction: column; gap: 16px; margin-bottom: 30px; }
+
+.bar-row { display: flex; align-items: center; gap: 14px; }
+
+.bar-lbl {
+  width: 88px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.bar-track {
+  flex: 1;
+  height: 40px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 11px;
+  position: relative;
+  overflow: visible;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  padding-left: 14px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  width: 0%;
+  transition: width 1.2s cubic-bezier(0.22,1,0.36,1);
+  position: relative;
+  overflow: visible;
+}
+
+.bar-fill.sem {
+  background: linear-gradient(90deg, rgba(224,82,82,0.7), rgba(224,82,82,0.4));
+}
+
+.bar-fill.com {
+  background: linear-gradient(90deg, var(--teal), var(--glow));
+  box-shadow: 0 0 20px rgba(47,184,212,0.3);
+}
+
+.bar-tag {
+  position: absolute;
+  right: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--deep);
+  border: 1px solid rgba(47,184,212,0.3);
+  padding: 3px 11px;
+  border-radius: 100px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--cream);
+  font-family: 'Poppins', sans-serif;
+}
+
+.bar-fill.com .bar-tag { color: var(--glow); border-color: var(--glow); }
+.bar-fill.sem .bar-tag { color: #f09090; border-color: rgba(224,82,82,0.5); }
+
+/* ── KPI GRID ── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+@media (max-width: 580px) {
+  .kpi-grid { grid-template-columns: 1fr 1fr; }
+  .kpi-grid .kpi:last-child { grid-column: 1 / -1; }
+}
+
+.kpi {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(47,184,212,0.14);
+  border-radius: 14px;
+  padding: 18px 16px;
+}
+
+.kpi.hl {
+  border-color: rgba(47,184,212,0.5);
+  background: rgba(47,184,212,0.09);
+  animation: kpi-pulse 3s ease-in-out infinite;
+}
+
+@keyframes kpi-pulse {
+  0%,100% { box-shadow: 0 0 0 rgba(47,184,212,0); }
+  50%      { box-shadow: 0 0 18px rgba(47,184,212,0.2); }
+}
+
+.kpi-lbl {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: block;
+  margin-bottom: 5px;
+}
+
+.kpi-val {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--cream);
+  display: block;
+}
+
+.kpi.hl .kpi-val { color: var(--glow); }
+
+.kpi-sub {
+  font-size: 0.62rem;
+  color: var(--muted);
+  font-weight: 300;
+  margin-top: 3px;
+  display: block;
+}
+
+/* ── GAIN BADGE ── */
+.gain {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: linear-gradient(135deg, rgba(62,207,142,0.1), rgba(47,184,212,0.1));
+  border: 1px solid rgba(62,207,142,0.3);
+  border-radius: 14px;
+  padding: 20px 22px;
+  margin-bottom: 18px;
+}
+
+.gain-icon { font-size: 1.8rem; flex-shrink: 0; }
+
+.gain-txt {
+  font-size: 0.82rem;
+  color: rgba(240,236,227,0.65);
+  line-height: 1.5;
+}
+
+.gain-val {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--green);
+  display: block;
+  line-height: 1.2;
+  margin-bottom: 2px;
+}
+
+/* ── ROI ── */
+.roi-strip {
+  background: rgba(240,192,96,0.07);
+  border: 1px solid rgba(240,192,96,0.25);
+  border-radius: 14px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.roi-left {
+  font-size: 0.78rem;
+  color: rgba(240,236,227,0.6);
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.roi-left strong {
+  color: var(--gold);
+  font-size: 1.1rem;
+  font-weight: 700;
+  display: block;
+}
+
+.roi-right {
+  font-size: 0.7rem;
+  color: rgba(240,236,227,0.4);
+  text-align: right;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+/* ── DISCLAIMER ── */
+.disclaimer {
+  font-size: 0.6rem;
+  color: rgba(240,236,227,0.22);
+  text-align: center;
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+/* ── FADE IN ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.header      { animation: fadeUp 0.6s ease 0.05s both; }
+.section-a   { animation: fadeUp 0.6s ease 0.15s both; }
+.section-b   { animation: fadeUp 0.6s ease 0.25s both; }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="badge">
+      <span class="badge-dot"></span>
+      Diagnóstico MVP NUVO
+    </div>
+    <h1>Quanto VGV está<br>escapando do seu <span>funil?</span></h1>
+    <p>Preencha os dados do seu lançamento e veja em tempo real onde estão os leads perdidos e quanto a NUVO recupera.</p>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       SEÇÃO 1 — CALCULADORA DE CONVERSÃO
+  ════════════════════════════════════════ -->
+  <div class="section-a">
+    <div class="section-title">
+      <div class="section-num">1</div>
+      <div>
+        <h2>Qual é a sua taxa de conversão do funil?</h2>
+        <p>Se você não tiver esse número, use os campos abaixo para calcular agora</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="grid-3">
+        <div class="field">
+          <label>Leads no funil (mês)</label>
+          <input type="number" id="c-leads-total" placeholder="ex: 300" min="1">
+          <span class="field-hint">Total de leads que entraram no período</span>
+        </div>
+        <div class="field">
+          <label>Abordagens realizadas</label>
+          <input type="number" id="c-contatos" placeholder="ex: 180" min="0">
+          <span class="field-hint">Leads que receberam atendimento ativo</span>
+        </div>
+        <div class="field">
+          <label>Unidades vendidas (mês)</label>
+          <input type="number" id="c-contratos" placeholder="ex: 4" min="0">
+          <span class="field-hint">Contratos assinados no período</span>
+        </div>
+      </div>
+
+      <!-- Resultado conversão -->
+      <div class="conv-result" id="conv-result">
+
+        <div style="height:1px;background:linear-gradient(90deg,transparent,rgba(47,184,212,0.2),transparent);margin:28px 0 24px;"></div>
+
+        <div class="conv-result-grid">
+          <div class="conv-card danger">
+            <span class="conv-card-lbl">Conversão do funil</span>
+            <span class="conv-card-val" id="c-taxa-val">—</span>
+            <span class="conv-card-sub">leads → unidades vendidas</span>
+          </div>
+          <div class="conv-card gold">
+            <span class="conv-card-lbl">Taxa de abordagem</span>
+            <span class="conv-card-val" id="c-contato-val">—</span>
+            <span class="conv-card-sub">leads efetivamente atendidos</span>
+          </div>
+          <div class="conv-card danger">
+            <span class="conv-card-lbl">Leads não convertidos</span>
+            <span class="conv-card-val" id="c-perdidos-val">—</span>
+            <span class="conv-card-sub">VGV potencial desperdiçado</span>
+          </div>
+        </div>
+
+        <!-- Benchmark bar -->
+        <div class="bench-bar">
+          <div class="bench-bar-title">Sua taxa vs. mercado imobiliário</div>
+          <div class="bench-track">
+            <div class="bench-fill-bg"></div>
+            <div class="bench-fill-user" id="bench-user"></div>
+            <div class="bench-needle" id="bench-needle" style="left:0%"></div>
+          </div>
+          <div class="bench-labels">
+            <span>0%</span>
+            <span style="color:var(--red)">Média BR: 1,53%</span>
+            <span style="color:var(--gold)">Referência: 3,19%</span>
+            <span style="color:var(--green)">Alta performance: 6%+</span>
+            <span>10%</span>
+          </div>
+          <div style="margin-top:14px;font-size:0.72rem;color:var(--muted);font-weight:400;" id="bench-msg"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- DIVIDER -->
+  <div class="divider">
+    <span class="divider-label">Projeção da operação</span>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       SEÇÃO 2 — CALCULADORA DA OPERAÇÃO
+  ════════════════════════════════════════ -->
+  <div class="section-b">
+    <div class="section-title">
+      <div class="section-num">2</div>
+      <div>
+        <h2>Projeção de VGV com o método MVP NUVO</h2>
+        <p>Veja quanto VGV sua incorporadora deixa de capturar e o que muda com processo estruturado</p>
+      </div>
+    </div>
+
+    <div class="card">
+
+      <!-- Tag de sincronização -->
+      <div id="sync-tag" style="display:none;align-items:center;gap:8px;background:rgba(47,184,212,0.08);border:1px solid rgba(47,184,212,0.25);border-radius:10px;padding:10px 16px;margin-bottom:22px;font-size:0.72rem;color:var(--glow);font-weight:500;">
+        <span>⚡</span>
+        <span id="sync-msg">Dados preenchidos automaticamente a partir do diagnóstico acima</span>
+      </div>
+
+      <div class="grid-4" style="margin-bottom:28px;">
+        <div class="field">
+          <label>Leads no funil / mês</label>
+          <input type="number" id="op-leads" value="200" min="1">
+          <span class="field-hint">Sincronizado do diagnóstico (edite se precisar)</span>
+        </div>
+        <div class="field">
+          <label>VGV unitário médio (R$)</label>
+          <input type="text" id="op-ticket" value="450.000" placeholder="ex: 450.000">
+          <span class="field-hint">Valor médio de venda por unidade</span>
+        </div>
+        <div class="field">
+          <label>Sua taxa atual (%)</label>
+          <div style="position:relative;">
+            <input type="number" id="op-taxa" value="1.50" min="0.01" max="99" step="0.01" style="padding-right:36px;">
+            <span style="position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:0.85rem;font-weight:600;pointer-events:none;">%</span>
+          </div>
+          <span class="field-hint">Conversão do seu funil (edite se precisar)</span>
+        </div>
+        <div class="field">
+          <label style="color:var(--green);">Taxa com NUVO (%)</label>
+          <div style="position:relative;">
+            <input type="number" id="op-taxa-nuvo" value="3.50" min="0.01" max="99" step="0.01"
+              style="padding-right:36px;border-color:rgba(62,207,142,0.4);background:rgba(62,207,142,0.05);">
+            <span style="position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--green);font-size:0.85rem;font-weight:600;pointer-events:none;">%</span>
+          </div>
+          <span class="field-hint" id="nuvo-taxa-hint">Sua taxa + 2% (edite se quiser ajustar)</span>
+        </div>
+      </div>
+
+      <!-- Bars -->
+      <div class="bars-title">Unidades vendidas por mês: funil sem processo vs. funil estruturado</div>
+      <div class="bars-wrap">
+        <div class="bar-row">
+          <span class="bar-lbl" id="lbl-sem">Sem NUVO</span>
+          <div class="bar-track">
+            <div class="bar-fill sem" id="op-barSem">
+              <span class="bar-tag" id="op-amtSem">—</span>
+            </div>
+          </div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-lbl" id="lbl-com">Com NUVO</span>
+          <div class="bar-track">
+            <div class="bar-fill com" id="op-barCom">
+              <span class="bar-tag" id="op-amtCom">—</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="height:1px;background:linear-gradient(90deg,transparent,rgba(47,184,212,0.2),transparent);margin:8px 0 26px;"></div>
+
+      <!-- KPIs -->
+      <div class="kpi-grid">
+        <div class="kpi">
+          <span class="kpi-lbl">VGV gerado / mês hoje</span>
+          <span class="kpi-val" id="op-vgvAtual">—</span>
+          <span class="kpi-sub">sem funil estruturado</span>
+        </div>
+        <div class="kpi hl">
+          <span class="kpi-lbl">VGV gerado / mês com NUVO</span>
+          <span class="kpi-val" id="op-vgvNuvo">—</span>
+          <span class="kpi-sub">funil ativo + metodologia MVP</span>
+        </div>
+        <div class="kpi">
+          <span class="kpi-lbl">Nova taxa de conversão</span>
+          <span class="kpi-val" id="op-taxaProj">—</span>
+          <span class="kpi-sub">vs. sua taxa atual no funil</span>
+        </div>
+      </div>
+
+      <!-- Gain -->
+      <div class="gain">
+        <span class="gain-icon">📈</span>
+        <div class="gain-txt">
+          <span class="gain-val" id="op-gain">—</span>
+          de VGV adicional capturado por mês com o funil estruturado pela NUVO
+        </div>
+      </div>
+
+      <!-- ROI — 3 métricas -->
+      <div style="margin-bottom:18px;">
+        <div style="font-size:0.68rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;">Retorno sobre o investimento: Plano Essencial (R$ 124.000/ano)</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">
+
+          <div style="background:rgba(240,192,96,0.07);border:1px solid rgba(240,192,96,0.25);border-radius:14px;padding:18px 16px;">
+            <span style="font-size:0.62rem;font-weight:600;letter-spacing:0.09em;text-transform:uppercase;color:rgba(240,192,96,0.6);display:block;margin-bottom:6px;">VGV adicional / ano</span>
+            <span style="font-size:1.3rem;font-weight:700;color:var(--gold);display:block;" id="roi-vgv-anual">—</span>
+            <span style="font-size:0.62rem;color:var(--muted);display:block;margin-top:3px;">receita nova gerada no período</span>
+          </div>
+
+          <div style="background:rgba(62,207,142,0.07);border:1px solid rgba(62,207,142,0.25);border-radius:14px;padding:18px 16px;">
+            <span style="font-size:0.62rem;font-weight:600;letter-spacing:0.09em;text-transform:uppercase;color:rgba(62,207,142,0.6);display:block;margin-bottom:6px;">Payback do investimento</span>
+            <span style="font-size:1.3rem;font-weight:700;color:var(--green);display:block;" id="roi-payback">—</span>
+            <span style="font-size:0.62rem;color:var(--muted);display:block;margin-top:3px;">para cobrir o custo da NUVO</span>
+          </div>
+
+          <div style="background:rgba(47,184,212,0.07);border:1px solid rgba(47,184,212,0.25);border-radius:14px;padding:18px 16px;">
+            <span style="font-size:0.62rem;font-weight:600;letter-spacing:0.09em;text-transform:uppercase;color:rgba(47,184,212,0.6);display:block;margin-bottom:6px;">Unidades extras / ano</span>
+            <span style="font-size:1.3rem;font-weight:700;color:var(--glow);display:block;" id="roi-unidades">—</span>
+            <span style="font-size:0.62rem;color:var(--muted);display:block;margin-top:3px;">vendas que não aconteceriam</span>
+          </div>
+
+        </div>
+      </div>
+
+      <p class="disclaimer">
+        Projeção baseada em benchmarks do setor imobiliário brasileiro: Leadster, HubSpot, Salesforce Research e Bain & Company.<br>
+        A taxa com NUVO considera +2 p.p. sobre a taxa atual do funil. Resultados reais variam conforme praça, produto, equipe e estágio do lançamento.
+      </p>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+(function() {
+
+  var tmr1 = null, tmr2 = null;
+  var taxaRealCalculada = 0; // guarda a taxa exata calculada na Seção 1
+  var nuvoManualOverride = false; // se o usuário editou manualmente a taxa NUVO
+
+  /* ─── UTILS ─── */
+  function fmtBRL(val) {
+    if (val >= 1000000) return 'R$ ' + (val / 1000000).toFixed(1).replace('.', ',') + ' M';
+    if (val >= 1000)    return 'R$ ' + Math.round(val / 1000) + ' K';
+    return 'R$ ' + Math.round(val);
+  }
+  function fmtN(val) {
+    if (val === 0) return '0';
+    return val % 1 === 0 ? String(Math.round(val)) : val.toFixed(1);
+  }
+  function pct(val) { return val.toFixed(2).replace('.', ',') + '%'; }
+  function setTxt(id, txt) { var e = document.getElementById(id); if (e) e.textContent = txt; }
+  function setW(id, w)     { var e = document.getElementById(id); if (e) e.style.width = w + '%'; }
+  function setVal(id, v)   { var e = document.getElementById(id); if (e) e.value = v; }
+  function getNum(id, def) { var e = document.getElementById(id); return e ? (parseFloat(e.value) || def) : def; }
+
+  function formatTicket(raw) {
+    var num = raw.replace(/\D/g, '');
+    if (!num) return '';
+    return Number(num).toLocaleString('pt-BR');
+  }
+  function parseTicket(val) {
+    return parseFloat((val + '').replace(/\./g, '').replace(',', '.')) || 450000;
+  }
+
+  /* ─── SEÇÃO 1 — CALCULADORA DE CONVERSÃO ─── */
+  function calcConv() {
+    var total    = getNum('c-leads-total', 0);
+    var contatos = getNum('c-contatos', 0);
+    var fechados = getNum('c-contratos', 0);
+
+    if (total <= 0) return;
+
+    // Mostra resultado
+    var result = document.getElementById('conv-result');
+    if (result) result.className = 'conv-result visible';
+
+    var taxaConv    = (fechados / total) * 100;
+    var taxaContato = (contatos / total) * 100;
+    var perdidos    = total - fechados;
+
+    taxaRealCalculada = taxaConv;
+
+    setTxt('c-taxa-val',     pct(taxaConv));
+    setTxt('c-contato-val',  pct(taxaContato));
+    setTxt('c-perdidos-val', Math.round(perdidos) + ' leads');
+
+    // Benchmark bar — escala 0–10%
+    var pctBar = Math.min((taxaConv / 10) * 100, 100);
+    setW('bench-user', pctBar);
+    var needle = document.getElementById('bench-needle');
+    if (needle) needle.style.left = pctBar + '%';
+
+    // Mensagem diagnóstica
+    var msg = '';
+    if (taxaConv < 1)         msg = '⚠️ Menos de 1 em cada 100 leads vira contrato. Seu funil está com vazamento crítico. Processo e CRM resolvem isso.';
+    else if (taxaConv < 1.53) msg = '⚠️ Abaixo da média do setor imobiliário (1,53%). Cada lead que some representa VGV que não entra no caixa.';
+    else if (taxaConv < 3.19) msg = '📊 Dentro da média, mas há VGV escorregando no funil. Com metodologia de vendas e gestão de pipeline, dá para dobrar.';
+    else if (taxaConv < 6)    msg = '✅ Acima da média nacional! Com funil estruturado e reativação de base, você pode chegar a alta performance.';
+    else                      msg = '🏆 Alta performance! A NUVO estrutura processo para manter esse ritmo mesmo com crescimento de equipe e novos lançamentos.';
+    setTxt('bench-msg', msg);
+
+    // ── SINCRONIZA SEÇÃO 2 ──
+    // Atualiza leads
+    var opLeads = document.getElementById('op-leads');
+    if (opLeads && total > 0) opLeads.value = Math.round(total);
+
+    // Atualiza taxa atual com valor exato calculado
+    var opTaxa = document.getElementById('op-taxa');
+    if (opTaxa) opTaxa.value = taxaConv.toFixed(2);
+
+    // Atualiza taxa NUVO só se não foi editada manualmente
+    if (!nuvoManualOverride) {
+      var taxaNuvo = taxaConv + 2;
+      var opTaxaNuvo = document.getElementById('op-taxa-nuvo');
+      if (opTaxaNuvo) opTaxaNuvo.value = taxaNuvo.toFixed(2);
+      var hint = document.getElementById('nuvo-taxa-hint');
+      if (hint) hint.textContent = 'Sua taxa (' + pct(taxaConv) + ') + 2% aplicado pela NUVO';
+    }
+
+    // Mostra banner de sincronização
+    var syncTag = document.getElementById('sync-tag');
+    var syncMsg = document.getElementById('sync-msg');
+    if (syncTag) syncTag.style.display = 'flex';
+    if (syncMsg) syncMsg.textContent = '⚡ Funil sincronizado: ' + Math.round(total) + ' leads/mês · Conversão atual ' + pct(taxaConv) + ' · Taxa com NUVO ' + pct(taxaConv + 2);
+
+    calcOp();
+  }
+
+  /* ─── SEÇÃO 2 — CALCULADORA DA OPERAÇÃO ─── */
+  function calcOp() {
+    var leads     = getNum('op-leads', 200);
+    var ticket    = parseTicket(document.getElementById('op-ticket') ? document.getElementById('op-ticket').value : '450000');
+    var taxaAtual = getNum('op-taxa', 1.5);
+    var taxaNuvo  = getNum('op-taxa-nuvo', taxaAtual + 2);
+
+    var txAtual = taxaAtual / 100;
+    var txNuvo  = taxaNuvo  / 100;
+
+    var cAtual = leads * txAtual;
+    var cNuvo  = leads * txNuvo;
+    var vAtual = cAtual * ticket;
+    var vNuvo  = cNuvo  * ticket;
+    var gain   = vNuvo - vAtual;
+    var gainAnual = gain * 12;
+
+    // Bars — proporcionais entre si
+    var maxC = Math.max(cAtual, cNuvo, 0.001);
+    var semW = (cAtual / maxC) * 84;
+    var comW = (cNuvo  / maxC) * 84;
+
+    setW('op-barSem', semW);
+    setW('op-barCom', comW);
+
+    // Labels das barras com taxa
+    setTxt('lbl-sem', taxaAtual.toFixed(2).replace('.', ',') + '%');
+    setTxt('lbl-com', taxaNuvo.toFixed(2).replace('.', ',') + '%');
+
+    setTxt('op-amtSem', fmtN(cAtual) + ' unidades/mês');
+    setTxt('op-amtCom', fmtN(cNuvo)  + ' unidades/mês');
+
+    setTxt('op-vgvAtual', fmtBRL(vAtual));
+    setTxt('op-vgvNuvo',  fmtBRL(vNuvo));
+    setTxt('op-taxaProj', pct(taxaNuvo));
+    setTxt('op-gain',     fmtBRL(gain));
+
+    // ── ROI — 3 métricas ──
+    var plano     = 124000;
+    var gainAnual = gain * 12;
+    var unidadesExtras = (cNuvo - cAtual) * 12;
+
+    // VGV adicional anual
+    setTxt('roi-vgv-anual', fmtBRL(gainAnual));
+
+    // Payback em meses
+    if (gain > 0) {
+      var paybackMeses = plano / (gain * 12) * 12; // meses para pagar o plano anual
+      paybackMeses = Math.ceil(paybackMeses);
+      if (paybackMeses <= 1) {
+        setTxt('roi-payback', '< 1 mês');
+      } else if (paybackMeses < 12) {
+        setTxt('roi-payback', paybackMeses + (paybackMeses === 1 ? ' mês' : ' meses'));
+      } else {
+        setTxt('roi-payback', '> 12 meses');
+      }
+    } else {
+      setTxt('roi-payback', '—');
+    }
+
+    // Unidades extras no ano
+    var uExtStr = unidadesExtras % 1 === 0
+      ? Math.round(unidadesExtras) + ' unidades'
+      : unidadesExtras.toFixed(1) + ' unidades';
+    setTxt('roi-unidades', uExtStr);
+  }
+
+  /* ─── QUANDO TAXA ATUAL É EDITADA MANUALMENTE NA SEÇÃO 2 ─── */
+  function onTaxaAtualChange() {
+    // Atualiza taxa NUVO automaticamente se não foi sobrescrita
+    if (!nuvoManualOverride) {
+      var taxaAtual = getNum('op-taxa', 1.5);
+      var opTaxaNuvo = document.getElementById('op-taxa-nuvo');
+      if (opTaxaNuvo) opTaxaNuvo.value = (taxaAtual + 2).toFixed(2);
+      var hint = document.getElementById('nuvo-taxa-hint');
+      if (hint) hint.textContent = 'Sua taxa + 2% (edite se quiser ajustar)';
+    }
+    clearTimeout(tmr2);
+    tmr2 = setTimeout(calcOp, 250);
+  }
+
+  /* ─── BIND EVENTOS ─── */
+  function bindAll() {
+
+    // Seção 1
+    var c1 = ['c-leads-total', 'c-contatos', 'c-contratos'];
+    for (var i = 0; i < c1.length; i++) {
+      (function(id) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        el.oninput  = function() { clearTimeout(tmr1); tmr1 = setTimeout(calcConv, 280); };
+        el.onchange = function() { clearTimeout(tmr1); tmr1 = setTimeout(calcConv, 280); };
+      })(c1[i]);
+    }
+
+    // Seção 2 — leads
+    var elLeads = document.getElementById('op-leads');
+    if (elLeads) {
+      elLeads.oninput = elLeads.onchange = function() {
+        clearTimeout(tmr2); tmr2 = setTimeout(calcOp, 250);
+      };
+    }
+
+    // Seção 2 — taxa atual
+    var elTaxa = document.getElementById('op-taxa');
+    if (elTaxa) {
+      elTaxa.oninput = elTaxa.onchange = onTaxaAtualChange;
+    }
+
+    // Seção 2 — taxa NUVO (manual override)
+    var elTaxaNuvo = document.getElementById('op-taxa-nuvo');
+    if (elTaxaNuvo) {
+      elTaxaNuvo.oninput = elTaxaNuvo.onchange = function() {
+        nuvoManualOverride = true;
+        var hint = document.getElementById('nuvo-taxa-hint');
+        if (hint) hint.textContent = '✏️ Editado manualmente';
+        clearTimeout(tmr2); tmr2 = setTimeout(calcOp, 250);
+      };
+    }
+
+    // Ticket
+    var elTicket = document.getElementById('op-ticket');
+    if (elTicket) {
+      elTicket.oninput = function() {
+        elTicket.value = formatTicket(elTicket.value);
+        clearTimeout(tmr2); tmr2 = setTimeout(calcOp, 250);
+      };
+    }
+  }
+
+  /* ─── INIT COM POLLING ─── */
+  var initiated = false, pollCount = 0;
+
+  function init() {
+    if (initiated) return;
+    if (!document.getElementById('op-leads')) return;
+    initiated = true;
+    bindAll();
+    calcOp();
+  }
+
+  init();
+  setTimeout(init, 100);
+  setTimeout(init, 300);
+  setTimeout(init, 700);
+  setTimeout(init, 1500);
+
+  var poll = setInterval(function() {
+    pollCount++;
+    init();
+    if (initiated || pollCount > 40) clearInterval(poll);
+  }, 150);
+
+  if (document.addEventListener) {
+    document.addEventListener('DOMContentLoaded', init);
+  }
+
+})();
+</script>
+
+</body>
+</html>
